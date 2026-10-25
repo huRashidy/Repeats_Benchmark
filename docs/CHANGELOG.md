@@ -72,4 +72,31 @@ Analysis of the Carbon-X pretraining corpus (`HuggingFaceBio/carbon-pretraining-
 2. **Lack of Repeat Supervision:** Transposable elements (LINE, LTR, DNA transposons, retrotransposons) make up >50% of the genome ("dark matter"), but foundation models rarely receive explicit supervision on repetitive element taxonomy during pretraining or instruction tuning.
 3. **Inductive Bias on Unaligned DNA:** When confronted with raw, unaligned repetitive fragments outside gene/exon context, the model detects local k-mer redundancy and defaults to predicting `Simple_repeat` (85.7% recall on actual simple repeats, but overgeneralized to transposable elements) or `Unknown`.
 
+---
+
+### [2026-10-25] - Full Benchmark Step 2: Repeat Family Evaluation Results
+
+#### 1. Repeat Family Benchmark Results (N = 2,000 sequences, 49 candidate families)
+- **Invalid Output Rate:** 0.00% (0 / 2,000 invalid; 100% adherence to closed 49-family label set).
+- **Accuracy:** 5.20% (104 / 2,000 correct).
+- **MCC (Matthews Correlation Coefficient):** +0.0371 (positive correlation above chance).
+- **Macro F1 Score:** 0.0105 (Weighted F1: 0.0107).
+- **Macro Precision:** 0.0062 | **Macro Recall:** 0.0507.
+- **Top Predictions:**
+  - `Alu`: 910 (45.5%)
+  - `Low_complexity`: 363 (18.15%)
+  - `Unknown`: 351 (17.55%)
+  - `Simple_repeat`: 135 (6.75%)
+  - `L2`: 125 (6.25%)
+  - `MIR`: 113 (5.65%)
+  - `5S-Deu-L2`: 3 (0.15%)
+- **Key Family Recalls:**
+  - **`Alu`:** **92.86% Recall** (39 / 42 true Alu elements correctly identified).
+  - **`Low_complexity`:** **78.57% Recall** (33 / 42 correctly identified).
+  - **`Unknown`:** **39.02% Recall** (16 / 41).
+  - **`Simple_repeat`:** **23.81% Recall** (10 / 42).
+  - **`L2`:** **9.52% Recall** (4 / 42).
+  - **`MIR`:** **4.76% Recall** (2 / 42).
+
+
 
