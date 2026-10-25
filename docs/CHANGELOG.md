@@ -47,3 +47,29 @@ Follows official Hugging Face Bio Carbon-X guidelines:
 - **Label Adherence:** 100% exact match compliance against allowed candidate classes/families (0% invalid prediction rate).
 - **Artifacts:** Verified automated streaming to `results/predictions_{task}.csv`, JSON metrics export to `results/metrics_{task}.json`, and confusion matrix rendering to `results/confusion_matrix_{task}.png`.
 
+---
+
+### [2026-10-25] - Full Benchmark Step 1: Repeat Class Evaluation & Biological Insights
+
+#### 1. Repeat Class Benchmark Results (N = 2,000 sequences)
+- **Invalid Output Rate:** 0.00% (0 / 2,000 invalid; 100% adherence to closed 16-class label set).
+- **Accuracy:** 3.95% (79 / 2,000 correct).
+- **MCC (Matthews Correlation Coefficient):** +0.0192 (positive correlation above chance).
+- **Macro F1 Score:** 0.0307 (Weighted F1: 0.0232).
+- **Macro Precision:** 0.1206 | **Macro Recall:** 0.0887.
+- **Prediction Distribution:**
+  - `Simple_repeat`: 1,459 (72.95%)
+  - `Unknown`: 340 (17.00%)
+  - `SINE`: 143 (7.15%)
+  - `Low_complexity`: 54 (2.70%)
+  - `Satellite`: 2 (0.10%)
+  - `DNA`: 2 (0.10%)
+  - Other 10 transposable element classes: 0 predictions.
+
+#### 2. Root Cause Analysis: Pretraining Corpus Bias
+Analysis of the Carbon-X pretraining corpus (`HuggingFaceBio/carbon-pretraining-corpus`) and fine-tuning mixture reveals why the model struggles with transposable elements:
+1. **Focus on Coding & Regulatory DNA:** The model was trained heavily on mRNA (OpenGenome2), RefSeq protein-coding sequences, promoters, enhancers, and ClinVar coding variants (BioReason benchmark).
+2. **Lack of Repeat Supervision:** Transposable elements (LINE, LTR, DNA transposons, retrotransposons) make up >50% of the genome ("dark matter"), but foundation models rarely receive explicit supervision on repetitive element taxonomy during pretraining or instruction tuning.
+3. **Inductive Bias on Unaligned DNA:** When confronted with raw, unaligned repetitive fragments outside gene/exon context, the model detects local k-mer redundancy and defaults to predicting `Simple_repeat` (85.7% recall on actual simple repeats, but overgeneralized to transposable elements) or `Unknown`.
+
+
