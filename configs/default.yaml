@@ -1,0 +1,22 @@
+model_id: HuggingFaceBio/Carbon-X
+quantization: 8bit          # 8bit | 4bit
+max_memory_per_gpu: "10GiB" # 2080 Ti has 11 GB; leave headroom
+gpus: [0, 1]
+
+# Official Carbon-X sampling defaults (generation_config.json)
+generation:
+  do_sample: true
+  temperature: 0.6
+  top_p: 0.95
+  top_k: 20
+  max_new_tokens: 16
+
+seed: 42
+
+tasks:
+  class:
+    csv: data/repeat_class_dataset_2000.csv
+    label_col: repeat_class
+  family:
+    csv: data/repeat_dataset_2000.csv
+    label_col: repeat_family
