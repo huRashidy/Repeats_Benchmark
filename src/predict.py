@@ -141,7 +141,7 @@ def run_benchmark(
             seq = str(row["Sequence"]).strip()
             true_label = str(row[label_col]).strip()
 
-            if task == "class":
+            if task.startswith("class"):
                 user_prompt = get_class_prompt(seq, allowed_labels)
             else:
                 user_prompt = get_family_prompt(seq, allowed_labels)
@@ -210,7 +210,7 @@ def run_benchmark(
 
 def main():
     parser = argparse.ArgumentParser(description="Carbon-X Repeat Benchmark")
-    parser.add_argument("--task", choices=["class", "family"], default="class", help="Benchmark task")
+    parser.add_argument("--task", default="class", help="Benchmark task name (e.g. class, class_min100, family, family_min100)")
     parser.add_argument("--config", default="configs/default.yaml", help="Path to config YAML")
     parser.add_argument("--limit", type=int, default=None, help="Optional sample limit for testing")
     parser.add_argument("--quantization", choices=["8bit", "4bit"], default=None, help="Override quantization")

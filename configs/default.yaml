@@ -17,6 +17,13 @@ tasks:
   class:
     csv: data/repeat_class_dataset_2000.csv
     label_col: repeat_class
+  class_min100:
+    csv: data/repeat_class_dataset_2000_min100.csv
+    label_col: repeat_class
   family:
     csv: data/repeat_dataset_2000.csv
     label_col: repeat_family
+  family_min100:
+    csv: data/repeat_dataset_2000_min100.csv
+    label_col: repeat_family
+
