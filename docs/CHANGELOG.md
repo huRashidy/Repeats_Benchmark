@@ -98,5 +98,30 @@ Analysis of the Carbon-X pretraining corpus (`HuggingFaceBio/carbon-pretraining-
   - **`L2`:** **9.52% Recall** (4 / 42).
   - **`MIR`:** **4.76% Recall** (2 / 42).
 
+---
 
+### [2026-10-25] - Final Milestone: 4-Way Comprehensive Benchmark Evaluation
 
+Completed zero-shot evaluation across all 4 datasets (8,000 total sequences evaluated):
+1. `repeat_class_dataset_2000.csv` (15 classes, no `Unknown`):
+   - Accuracy: **4.90%** (98 / 2000 correct)
+   - MCC: **+0.0348** (81% increase over runs with `Unknown`)
+   - Macro F1: **0.0355**
+   - Key highlights: SINE recall rose to 17.08%, Low_complexity recall rose to 40.48%, Simple_repeat recall 88.37%, Satellite precision 100%.
+
+2. `repeat_dataset_2000.csv` (48 families, no `Unknown`):
+   - Accuracy: **4.50%** (90 / 2000 correct)
+   - MCC: **+0.0277**
+   - Macro F1: **0.0069**
+   - Key highlights: `Alu` recall **93.02%** (40 / 43 correct, F1 = 0.0985).
+
+3. `repeat_class_dataset_2000_min100.csv` (14 classes, $\ge 100\text{ bp}$):
+   - Accuracy: **4.95%** (99 / 2000 correct)
+   - MCC: **+0.0244**
+   - Macro F1: **0.0235**
+
+4. `repeat_dataset_2000_min100.csv` (47 families, $\ge 100\text{ bp}$):
+   - Accuracy: **4.85%** (97 / 2000 correct)
+   - MCC: **+0.0318**
+   - Macro F1: **0.0081**
+   - Longer sequence context improved family discrimination by +0.35% accuracy and +0.0041 MCC.

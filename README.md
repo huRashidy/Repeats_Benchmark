@@ -45,24 +45,30 @@ Using Hugging Face `transformers` with `trust_remote_code=True` and `bitsandbyte
 
 ## Benchmark Results
 
-Empirical results evaluating Carbon-X zero-shot across **4,000 human genomic sequences** on 2 × NVIDIA RTX 2080 Ti GPUs:
+Empirical results evaluating Carbon-X zero-shot across **8,000 human genomic sequences (4 datasets)** on 2 × NVIDIA RTX 2080 Ti GPUs (8-bit quantization):
 
-| Benchmark Task | Evaluated Sequences | Candidate Labels | Accuracy | Macro F1 | Weighted F1 | Matthews Corr (MCC) | Invalid Output Rate |
+| Dataset & Task | Evaluated Sequences | Candidate Labels | Accuracy | Macro F1 | Weighted F1 | Matthews Corr (MCC) | Invalid Output Rate |
 |---|---|---|---|---|---|---|---|
-| **Repeat Class** | 2,000 | 16 classes | **3.95%** (79 / 2000) | 0.0307 | 0.0232 | **+0.0192** | **0.00%** (0 / 2000) |
-| **Repeat Family** | 2,000 | 49 families | **5.20%** (104 / 2000) | 0.0105 | 0.0107 | **+0.0371** | **0.00%** (0 / 2000) |
+| **Repeat Class (Standard)** | 2,000 | 15 classes | **4.90%** (98 / 2000) | **0.0355** | **0.0305** | **+0.0348** | **0.00%** (0 / 2000) |
+| **Repeat Class ($\ge 100\text{ bp}$)** | 2,000 | 14 classes | **4.95%** (99 / 2000) | **0.0235** | **0.0282** | **+0.0244** | **0.00%** (0 / 2000) |
+| **Repeat Family (Standard)** | 2,000 | 48 families | **4.50%** (90 / 2000) | **0.0069** | **0.0070** | **+0.0277** | **0.00%** (0 / 2000) |
+| **Repeat Family ($\ge 100\text{ bp}$)** | 2,000 | 47 families | **4.85%** (97 / 2000) | **0.0081** | **0.0083** | **+0.0318** | **0.00%** (0 / 2000) |
 
 ### Biological Findings & Pretraining Insights
 
 1. **Pretraining Corpus Bias ([`HuggingFaceBio/carbon-pretraining-corpus`](https://huggingface.co/datasets/HuggingFaceBio/carbon-pretraining-corpus)):**
    - Carbon-X was pretrained and post-trained predominantly on **protein-coding mRNA sequences, RefSeq genes, and ClinVar variant effects**.
-   - Transposable elements (TEs) make up over 50% of the human genome, but foundation genomic models rarely receive explicit taxonomic supervision on non-coding repetitive DNA.
-2. **Zero-Shot Inductive Collapse:**
-   - When presented with unaligned repetitive sequences without chromosomal coordinates or strand context, the model detects k-mer redundancy and defaults to predicting **`Simple_repeat`** (72.9% of class predictions) or **`Alu`** (45.5% of family predictions).
-3. **Specific Category Strengths:**
-   - **`Alu` Family:** **92.9% Recall** (39 / 42 true Alu elements correctly classified).
-   - **`Low_complexity`:** **78.6% Recall** (33 / 42 correctly identified).
-   - **`Simple_repeat`:** **85.7% Recall** (36 / 42 correctly identified).
+   - Transposable elements (TEs) make up over 50% of the human genome ("dark matter"), but foundation genomic language models rarely receive explicit taxonomic supervision on non-coding repetitive DNA.
+2. **Impact of Removing `Unknown`:**
+   - Removing `Unknown` from candidate prompts forced Carbon-X to actively choose valid biological labels, increasing Class accuracy from 3.95% to 4.90% and nearly doubling the MCC from +0.0192 to +0.0348.
+   - SINE detection improved dramatically to **17.08% Recall** (41 / 240 true SINEs identified; Precision: 18.64%, F1: 0.178).
+3. **Impact of Minimum Sequence Length ($\ge 100\text{ bp}$):**
+   - For repeat families, longer sequence context slightly improved discrimination, raising accuracy from **4.50% to 4.85%** and MCC from **+0.0277 to +0.0318**.
+   - For repeat classes, accuracy remained virtually unchanged (**4.90% vs 4.95%**), confirming that the bottleneck is largely semantic alignment rather than merely short sequence length.
+4. **Strongest Category Signatures:**
+   - **`Alu` Family (Primate SINE):** **93.02% Recall** (40 / 43 true Alu elements correctly identified).
+   - **`Simple_repeat` Class:** **88.37% Recall** (38 / 43 correctly identified).
+   - **`Low_complexity` Class:** **40.48% Recall** (17 / 42 correctly identified; F1: 0.296).
    - **`Satellite` Class:** **100.0% Precision**.
 
 

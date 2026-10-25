@@ -1,0 +1,113 @@
+{
+  "total_samples": 2000,
+  "valid_predictions": 2000,
+  "invalid_predictions": 0,
+  "invalid_rate": 0.0,
+  "accuracy": 0.0495,
+  "precision_macro": 0.0911,
+  "recall_macro": 0.0909,
+  "f1_macro": 0.0235,
+  "precision_weighted": 0.108,
+  "recall_weighted": 0.0495,
+  "f1_weighted": 0.0282,
+  "mcc": 0.0244,
+  "per_class": {
+    "DNA": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 622.0
+    },
+    "LINE": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 304.0
+    },
+    "LTR": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 261.0
+    },
+    "Low_complexity": {
+      "precision": 0.06896551724137931,
+      "recall": 0.09302325581395349,
+      "f1-score": 0.07920792079207921,
+      "support": 43.0
+    },
+    "RC": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 43.0
+    },
+    "RNA": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 43.0
+    },
+    "Retroposon": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 43.0
+    },
+    "SINE": {
+      "precision": 0.18021201413427562,
+      "recall": 0.19615384615384615,
+      "f1-score": 0.1878453038674033,
+      "support": 260.0
+    },
+    "Satellite": {
+      "precision": 1.0,
+      "recall": 0.006060606060606061,
+      "f1-score": 0.012048192771084338,
+      "support": 165.0
+    },
+    "Simple_repeat": {
+      "precision": 0.02595051297525649,
+      "recall": 0.9772727272727273,
+      "f1-score": 0.05055849500293945,
+      "support": 44.0
+    },
+    "rRNA": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 43.0
+    },
+    "scRNA": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 43.0
+    },
+    "snRNA": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 43.0
+    },
+    "srpRNA": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 43.0
+    },
+    "accuracy": 0.0495,
+    "macro avg": {
+      "precision": 0.09108057459649367,
+      "recall": 0.09089360252150949,
+      "f1-score": 0.023547136602393305,
+      "support": 2000.0
+    },
+    "weighted avg": {
+      "precision": 0.10798123174360112,
+      "recall": 0.0495,
+      "f1-score": 0.02822912259347126,
+      "support": 2000.0
+    }
+  }
+}
