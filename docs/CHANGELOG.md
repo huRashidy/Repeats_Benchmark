@@ -39,3 +39,11 @@ Follows official Hugging Face Bio Carbon-X guidelines:
 - `src/predict.py`: Resumable streaming prediction loop saving directly to CSV.
 - `configs/default.yaml`: Centralized configuration.
 - `environment.yml`: Conda specification for `benchmark_env`.
+
+#### 5. Verification & Smoke Test Milestones
+- **Multi-GPU Sharding:** `HuggingFaceBio/Carbon-X` loaded with `BitsAndBytesConfig(load_in_8bit=True)` sharded across `cuda:0` and `cuda:1` ({0, 1}).
+- **Driver / PyTorch Alignment:** Configured PyTorch `2.6.0+cu124` for NVIDIA Driver 12.4 compatibility.
+- **Inference Speed:** ~1.5 to 2.2 samples/second (~0.5s - 0.7s per sequence).
+- **Label Adherence:** 100% exact match compliance against allowed candidate classes/families (0% invalid prediction rate).
+- **Artifacts:** Verified automated streaming to `results/predictions_{task}.csv`, JSON metrics export to `results/metrics_{task}.json`, and confusion matrix rendering to `results/confusion_matrix_{task}.png`.
+

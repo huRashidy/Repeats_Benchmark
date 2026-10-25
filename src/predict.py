@@ -93,12 +93,14 @@ def run_benchmark(
     df = df[~df[label_col].astype(str).str.contains(r"\?")]
     df = df.reset_index(drop=True)
 
+    # Always compute complete allowed label set from the full dataset
+    allowed_labels = sorted(df[label_col].astype(str).unique().tolist())
+
     if limit is not None and limit > 0:
         df = df.head(limit)
         print(f"Limiting benchmark to {limit} samples for testing.")
 
-    allowed_labels = sorted(df[label_col].astype(str).unique().tolist())
-    print(f"Task: {task} | Total sequences: {len(df)} | Unique classes/families: {len(allowed_labels)}")
+    print(f"Task: {task} | Evaluation sequences: {len(df)} | Unique classes/families: {len(allowed_labels)}")
 
     output_csv.parent.mkdir(parents=True, exist_ok=True)
 
