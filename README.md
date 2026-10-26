@@ -54,22 +54,21 @@ Empirical results evaluating Carbon-X zero-shot across **8,000 human genomic seq
 | **Repeat Family (Standard)** | 2,000 | 48 families | **4.50%** (90 / 2000) | **0.0069** | **0.0070** | **+0.0277** | **0.00%** (0 / 2000) |
 | **Repeat Family ($\ge 100\text{ bp}$)** | 2,000 | 47 families | **4.85%** (97 / 2000) | **0.0081** | **0.0083** | **+0.0318** | **0.00%** (0 / 2000) |
 
-### Biological Findings & Pretraining Insights
+### Analysis & Failure Mode Characterization
 
-1. **Pretraining Corpus Bias ([`HuggingFaceBio/carbon-pretraining-corpus`](https://huggingface.co/datasets/HuggingFaceBio/carbon-pretraining-corpus)):**
-   - Carbon-X was pretrained and post-trained predominantly on **protein-coding mRNA sequences, RefSeq genes, and ClinVar variant effects**.
-   - Transposable elements (TEs) make up over 50% of the human genome ("dark matter"), but foundation genomic language models rarely receive explicit taxonomic supervision on non-coding repetitive DNA.
-2. **Impact of Removing `Unknown`:**
-   - Removing `Unknown` from candidate prompts forced Carbon-X to actively choose valid biological labels, increasing Class accuracy from 3.95% to 4.90% and nearly doubling the MCC from +0.0192 to +0.0348.
-   - SINE detection improved dramatically to **17.08% Recall** (41 / 240 true SINEs identified; Precision: 18.64%, F1: 0.178).
-3. **Impact of Minimum Sequence Length ($\ge 100\text{ bp}$):**
-   - For repeat families, longer sequence context slightly improved discrimination, raising accuracy from **4.50% to 4.85%** and MCC from **+0.0277 to +0.0318**.
-   - For repeat classes, accuracy remained virtually unchanged (**4.90% vs 4.95%**), confirming that the bottleneck is largely semantic alignment rather than merely short sequence length.
-4. **Strongest Category Signatures:**
-   - **`Alu` Family (Primate SINE):** **93.02% Recall** (40 / 43 true Alu elements correctly identified).
-   - **`Simple_repeat` Class:** **88.37% Recall** (38 / 43 correctly identified).
-   - **`Low_complexity` Class:** **40.48% Recall** (17 / 42 correctly identified; F1: 0.296).
-   - **`Satellite` Class:** **100.0% Precision**.
+1. **Severe Mode Collapse (Label Attractor Bias):**
+   - The model does not demonstrate genuine taxonomic discrimination. Instead, it collapses into a very narrow set of default attractor labels regardless of sequence features:
+     - **Repeat Class:** Across 2,000 sequences, the model predicts `Simple_repeat` for **85.15% (1,703 / 2,000)** of all inputs, and `SINE` for **11.00% (220 / 2,000)**. Over 96% of all predictions fall into just these two classes, leaving the remaining 13 classes virtually unpredicted.
+     - **Repeat Family:** The model predicts `Alu` for **38.45% (769 / 2,000)** and `Low_complexity` for **25.65% (513 / 2,000)**. High "recall" on `Alu` (93.02%) or `Simple_repeat` (88.37%) is an artifact of extreme over-prediction rather than selective recognition.
+2. **Failure to Discriminate (< 5% Accuracy, Near-Zero MCC):**
+   - Across all 4 benchmark configurations, zero-shot accuracy sits between **4.50% and 4.95%**, with Matthews Correlation Coefficients (MCC) near zero (**+0.024 to +0.035**).
+   - This performance is comparable to or worse than random assignment across candidate classes, confirming that zero-shot prompting cannot unlock RepeatMasker-level classification in Carbon-X.
+3. **Marginal Impact of Prompt & Sequence Length Adjustments:**
+   - **Removing `Unknown`:** Removing `Unknown` merely shifted predictions from one attractor to another; overall accuracy remained under 5% (3.95% $\to$ 4.90%). SINE recall reached only 17.08% (41 / 240), accompanied by high false positive rates.
+   - **Sequence Length Filter ($\ge 100\text{ bp}$):** Filtering out fragments under 100 bp did not resolve the failure mode. Repeat Class accuracy stayed flat (4.90% vs 4.95%), and Family accuracy shifted negligibly (4.50% vs 4.85%), proving that the root cause is not missing context length.
+4. **Pretraining Corpus Disconnect:**
+   - Pretraining on [`HuggingFaceBio/carbon-pretraining-corpus`](https://huggingface.co/datasets/HuggingFaceBio/carbon-pretraining-corpus) focused on protein-coding mRNAs, RefSeq transcripts, and variant effects. 
+   - The non-coding repetitive genome (>50% of human DNA) was not paired with taxonomic instruction tuning, leaving the model unable to map raw repetitive k-mer motifs to their evolutionary or structural classes.
 
 
 ---
